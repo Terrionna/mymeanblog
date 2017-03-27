@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <a href="#!/create">CCreate A New Post</a>
 <hr>
 <ul>
@@ -6,5 +7,16 @@
     {{ post.body.slice(o, 100) = '...'}}
     <button ng-click="edit(post)">Edit</button>
     <button ngclick="delete(post)">&times;</button>
+=======
+
+<a href="#!/create">Create A New Post</a>
+<hr>
+<ul>
+  <li ng-repeat='post in posts'>
+    {{ post.title }}
+    {{ post.body.slice(0, 100) + '...'}}
+    <button ng-click="edit(post)">E</button>
+    <button ng-click="delete(post)">&times;</button>
+>>>>>>> 35e04c8b8fbec12a0061f3e2548950b17e48cf60
   </li>
 </ul>

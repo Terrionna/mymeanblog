@@ -18,6 +18,14 @@
         controller: 'DashboardController',
         templateUrl: 'html/views/dashboard.html'
       })
+      .when('/create', {
+        controller: 'PostController',
+        templateUrl: 'html/views/create.html'
+      })
+      .when('/edit',{
+        controller: 'PostController',
+        templateUrl: 'html/views/edit/.html'
+      })
       .otherwise({
         redirectTo: '/'
       });
