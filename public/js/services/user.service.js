@@ -2,11 +2,11 @@
   angular.module('mymeanblog')
         .factory('UserService', UserService);
 
-  UserService.$inject = ['$http', '$windown'];
+  UserService.$inject = ['$http', '$window'];
 
-  function UserService($http){
+  function UserService($http, $window){
     var base = '/users';
-    var localStorage = $windown.localStorage;
+    var localStorage = $window.localStorage;
 
     function login(user){
       return $http.post('/login', user);
@@ -46,24 +46,56 @@
                     console.log(response);
                   });
     }
-  }
-    function currentUser(){}
-    function saveToken(token){
-            localStorage.setItem('mymeanblog-token', token)
+    function currentUser(){
+      if(isLoggedIn()){
+        var token = getToken();
+        var payload = token.split('.')[1];
+        payload = $window.atob(payload);
+        payload = JSON.parse(payload);
+        return {
+          _id: payload._id,
+          email: payload.email
+        }
+      } else {
+        return null;
+      }
     }
-    function getToken(){}
-    function  isLoggedIn(){}
-    function logout(){}
+    function saveToken(token){
+       localStorage.setItem('mymeanblog-token', token);
+    }
+    function getToken(){
+      return localStorage.getItem('mymeanblog-token');
+    }
+    function  isLoggedIn(){
+      var token = getToken();
+      var payLoad;
+      if(token){
+        payload = token.split('.')[1];
+        payload = $window.atob(payload);
+        payload =JSON.parse(payload);
+        var isExpired = payload.exp < Date.now() / 1000
+        if(isExpired){
+          logout();
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return false
+      }
+    }
+    function logout(){
+      localStorage.removeItem('mymeanblog-token');
+    }
     return {
       getAll: getAll,
       login: login,
       getOne: getOne,
       signup: signup,
       update: update,
-      delete: deleteUser
+      delete: deleteUser,
       currentUser: currentUser,
       saveToken: saveToken,
-
       getToken: getToken,
       isLoggedIn: isLoggedIn,
       logout: logout
