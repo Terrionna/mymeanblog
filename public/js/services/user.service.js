@@ -9,7 +9,11 @@
     var localStorage = $window.localStorage;
 
     function login(user){
-      return $http.post('/login', user);
+      return $http.post('/login', user)
+      .then(function(response){
+        var token = response.data.token;
+        saveToken(token);
+      });
     }
     function signup(user){
       return $http.post('/signup', user)

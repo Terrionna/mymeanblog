@@ -2,9 +2,9 @@
   angular.module('mymeanblog')
          .controller('PostController', PostController);
 
-PostController.$inject = ['$scope', 'PostService', '$routeParams'];
+PostController.$inject = ['$scope', 'PostService', '$routeParams', 'UserService', '$location'];
 
-  function PostController($scope, PostService, $routeParams){
+  function PostController($scope, PostService, $routeParams, UserService, $location){
     $scope.create = create;
     $scope.edit = edit;
     $scope.mockpost = {
@@ -23,7 +23,16 @@ PostController.$inject = ['$scope', 'PostService', '$routeParams'];
                  console.log('error');
                });
     function create(post){
-      PostService.create(post);
+     var userId = UserService.currentUser()._id;
+     console.log(userId);
+     post.author = userId;
+     PostService.create(post)
+                .then(function(){
+                  $location.path('/dashboard');
+                })
+                .catch(function(err){
+                  console.log(err)
+                })
     }
     function edit(post){
       PostService.edit(post);
